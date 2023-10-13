@@ -48,6 +48,14 @@ public class MatchController {
         }
     }
 
+    @PostMapping("/match/{matchId}/removePlayer/{userId}")
+    public Match matchRemovePlayer(@PathVariable("matchId") Long matchId, @PathVariable("userId") Long userId) {
+        try {
+            return matchService.removePlayer(matchId, userId);
+        } catch (ConflictException e) {
+            throw new ConflictException("Conflict occurred");
+        }
+    }
 
     @GetMapping("/match")
     // @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")

@@ -35,4 +35,14 @@ public class Match {
         }
         this.players.add(user);
     }
+    public void removePlayer(Long id){
+        if(this.players != null){
+            User userToRemove = this.players.stream().filter(x -> x.getId().equals(id))
+                    .findFirst().orElse(null);
+            if (userToRemove != null) {
+                this.players.remove(userToRemove);
+            }
+        }
+    }
+
 }

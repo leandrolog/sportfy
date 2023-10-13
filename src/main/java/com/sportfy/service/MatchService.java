@@ -51,6 +51,28 @@ public class MatchService {
             throw new ConflictException("Match not found");
         }
     }
+    public Match removePlayer(Long matchId, Long userId) {
+        Optional<Match> matchOptional = findById(matchId);
+        Optional<User> userOptional = userService.findById(userId);
+        if (matchOptional.isEmpty() || userOptional.isEmpty()) {
+            throw new IllegalArgumentException("Match or user not found.");
+        }
+        Match match = matchOptional.get();
+        User user = userOptional.get();
+        if (!match.getPlayers().contains(user)) {
+            throw new IllegalArgumentException("The user is not associated with this match.");
+        }
+        match.removePlayer(user.getId());
+        removeSlotPlayer(match);
+
+        return save(match);
+    }
+    public void removeSlotPlayer(Match match){
+        if(match.getSlot() >= 0){
+            Integer newBalance = match.getSlot() + 1;
+            match.setSlot(newBalance);
+        }
+    }
 
     public void verifySlot(Match match){
         if(match.getSlot() <= 0){
