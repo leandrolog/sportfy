@@ -1,13 +1,17 @@
 package com.sportfy.controller;
 
+import com.sportfy.dto.UserDto;
 import com.sportfy.model.Match;
+import com.sportfy.model.User;
 import com.sportfy.service.MatchService;
+import com.sportfy.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +22,8 @@ public class MatchController {
 
     @Autowired
     private MatchService matchService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/match")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -31,6 +37,17 @@ public class MatchController {
         //  }
 
     }
+
+    @PostMapping("/match/{id}/addPlayer")
+    public void matchAddPlayers(@PathVariable("id") Long id) {
+        try {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            matchService.addPlayer(user, id);
+        } catch (ConflictException e) {
+            throw new ConflictException("Conflict occurred");
+        }
+    }
+
 
     @GetMapping("/match")
     // @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")

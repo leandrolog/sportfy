@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,4 +23,16 @@ public class Match {
     private Schedule schedule;
     private Integer slot;
     private String category;
+    @Column(nullable = true)
+    @OneToMany()
+    @JoinColumn(name = "user_id")
+    private List<User> players;
+
+
+    public void addPlayer(User user) {
+        if (this.players == null) {
+            this.players = new ArrayList<>();
+        }
+        this.players.add(user);
+    }
 }

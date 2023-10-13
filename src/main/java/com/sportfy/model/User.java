@@ -25,8 +25,7 @@ public class User implements UserDetails {
     private Long id;
     private String name;
     private String email;
-    @Column(nullable = true)
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "match_id")
     private List<Match> matches;
     private String role;

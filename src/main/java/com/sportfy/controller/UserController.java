@@ -32,8 +32,7 @@ public class UserController {
     public User saveUser(@RequestBody UserDto userDto) {
         User user = new User();
         userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
-
-        BeanUtils.copyProperties(userDto ,user);
+        BeanUtils.copyProperties(userDto ,user, "matches");
         return userService.save(user);
     }
     @GetMapping("/users")
