@@ -1,6 +1,5 @@
 package com.sportfy.controller;
 
-import com.sportfy.controller.ConflictException;
 import com.sportfy.dto.UserDto;
 import com.sportfy.model.User;
 import com.sportfy.service.UserService;
@@ -10,6 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,14 +21,18 @@ public class UserController {
 
     @Autowired
     private final UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userService = userService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @PostMapping("/user")
     public User saveUser(@RequestBody UserDto userDto) {
         User user = new User();
+        userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+
         BeanUtils.copyProperties(userDto ,user);
         return userService.save(user);
     }
