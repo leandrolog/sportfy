@@ -99,3 +99,27 @@ public class MatchController {
         return matchService.save(matchToUpdate);
     }
 }
+
+/*
+*
+*{
+		"schedule":{
+			"local": "campinho",
+			"date": "2024-03-10"
+		},
+	"slot" : 12,
+	"category" : "volei"
+}
+*{
+	"produtos": [
+			{
+		"nome": "sasd",
+		"quantity": 5,
+		"codigo": 0
+	}
+
+	],
+	"codigo": 0
+}
+*
+* */
