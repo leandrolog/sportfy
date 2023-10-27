@@ -1,5 +1,6 @@
 package com.sportfy.controller;
 
+import com.sportfy.dto.MatchDto;
 import com.sportfy.dto.UserDto;
 import com.sportfy.model.Match;
 import com.sportfy.model.User;
@@ -27,13 +28,14 @@ public class MatchController {
 
     @PostMapping("/match")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Match createMatch(@RequestBody Match match) {
+    public Match createMatch(@RequestBody MatchDto matchDto) {
         // Optional<Match> existingMatch = matchService.findById(match.getId());
         //if (existingMatch.isPresent()) {
         //     throw new com.sportfy.controller.ConflictException("A match with this ID already exists.");
         //  } else {
+        Match match = new Match();
+        BeanUtils.copyProperties(matchDto,match);
         return matchService.save(match);
-
         //  }
 
     }
@@ -88,14 +90,14 @@ public class MatchController {
     @PutMapping("/match/{id}")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public Match updateProduct(@PathVariable(value = "id") Long id,
-                               @RequestBody Match match) {
+                               @RequestBody MatchDto matchDto) {
         Optional<Match> matchOptional = matchService.findById(id);
         if (!matchOptional.isPresent()) {
             throw new ConflictException("Match not found.");
         }
         Match matchToUpdate = matchOptional.get();
 
-        BeanUtils.copyProperties(match, matchToUpdate);
+        BeanUtils.copyProperties(matchDto, matchToUpdate);
         return matchService.save(matchToUpdate);
     }
 }
