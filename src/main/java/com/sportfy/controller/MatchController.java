@@ -29,15 +29,9 @@ public class MatchController {
     @PostMapping("/match")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public Match createMatch(@RequestBody MatchDto matchDto) {
-        // Optional<Match> existingMatch = matchService.findById(match.getId());
-        //if (existingMatch.isPresent()) {
-        //     throw new com.sportfy.controller.ConflictException("A match with this ID already exists.");
-        //  } else {
         Match match = new Match();
         BeanUtils.copyProperties(matchDto, match);
         return matchService.save(match);
-        //  }
-
     }
 
     @PostMapping("/match/{id}/addPlayer")

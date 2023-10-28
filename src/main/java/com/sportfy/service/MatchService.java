@@ -24,7 +24,12 @@ public class MatchService {
 
     @Transactional
     public Match save(Match match) {
-        return matchRepository.save(match);
+        Optional<Match> existingMatch = matchRepository.findById(match.getId());
+        if (existingMatch.isPresent()) {
+            throw new RuntimeException("A match with this ID already exists.");
+        } else {
+            return matchRepository.save(match);
+        }
     }
 
     @Transactional
