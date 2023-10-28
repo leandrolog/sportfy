@@ -1,5 +1,6 @@
 package com.sportfy.controller;
 
+import com.sportfy.dto.MatchDto;
 import com.sportfy.dto.UserDto;
 import com.sportfy.model.Match;
 import com.sportfy.model.User;
@@ -27,15 +28,10 @@ public class MatchController {
 
     @PostMapping("/match")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Match createMatch(@RequestBody Match match) {
-        // Optional<Match> existingMatch = matchService.findById(match.getId());
-        //if (existingMatch.isPresent()) {
-        //     throw new com.sportfy.controller.ConflictException("A match with this ID already exists.");
-        //  } else {
+    public Match createMatch(@RequestBody MatchDto matchDto) {
+        Match match = new Match();
+        BeanUtils.copyProperties(matchDto, match);
         return matchService.save(match);
-
-        //  }
-
     }
 
     @PostMapping("/match/{id}/addPlayer")
@@ -87,39 +83,8 @@ public class MatchController {
 
     @PutMapping("/match/{id}")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
-    public Match updateProduct(@PathVariable(value = "id") Long id,
-                               @RequestBody Match match) {
-        Optional<Match> matchOptional = matchService.findById(id);
-        if (!matchOptional.isPresent()) {
-            throw new ConflictException("Match not found.");
-        }
-        Match matchToUpdate = matchOptional.get();
-
-        BeanUtils.copyProperties(match, matchToUpdate);
-        return matchService.save(matchToUpdate);
+    public Match updateProduct(@PathVariable(value = "id") Long id,@RequestBody MatchDto matchDto) {
+        return matchService.update(matchDto, id);
     }
 }
 
-/*
-*
-*{
-		"schedule":{
-			"local": "campinho",
-			"date": "2024-03-10"
-		},
-	"slot" : 12,
-	"category" : "volei"
-}
-*{
-	"produtos": [
-			{
-		"nome": "sasd",
-		"quantity": 5,
-		"codigo": 0
-	}
-
-	],
-	"codigo": 0
-}
-*
-* */
