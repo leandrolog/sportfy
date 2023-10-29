@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class MatchController {
 
     @Autowired
@@ -29,9 +30,7 @@ public class MatchController {
     @PostMapping("/match")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public Match createMatch(@RequestBody MatchDto matchDto) {
-        Match match = new Match();
-        BeanUtils.copyProperties(matchDto, match);
-        return matchService.save(match);
+        return matchService.save(matchDto);
     }
 
     @PostMapping("/match/{id}/addPlayer")

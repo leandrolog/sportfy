@@ -23,13 +23,10 @@ public class MatchService {
     private UserService userService;
 
     @Transactional
-    public Match save(Match match) {
-        Optional<Match> existingMatch = matchRepository.findById(match.getId());
-        if (existingMatch.isPresent()) {
-            throw new RuntimeException("A match with this ID already exists.");
-        } else {
+    public Match save(MatchDto matchDto) {
+        Match match = new Match();
+            BeanUtils.copyProperties(matchDto, match);
             return matchRepository.save(match);
-        }
     }
 
     @Transactional
@@ -60,7 +57,7 @@ public class MatchService {
         Optional<Match> matchOptional = findById(id);
 
         if (matchOptional.isPresent()) {
-            save(verifySlot(matchOptional.get(), user));
+            matchRepository.save(verifySlot(matchOptional.get(), user));
         } else {
             throw new ConflictException("Match not found");
         }
@@ -77,7 +74,7 @@ public class MatchService {
         if (!match.getPlayers().contains(user)) {
             throw new IllegalArgumentException("The user is not associated with this match.");
         }
-        return save(removeSlotPlayer(match, user));
+        return matchRepository.save(removeSlotPlayer(match, user));
     }
 
     public Match removeSlotPlayer(Match match, User user) {

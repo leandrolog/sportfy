@@ -13,13 +13,11 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "match")
-@AllArgsConstructor
-@NoArgsConstructor
 public class Match {
-
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
+    private String title;
     private Schedule schedule;
     private Integer slot;
     private String category;

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class MatchDto {
 
+    private String title;
     private Schedule schedule;
     private Integer slot;
     private String category;
