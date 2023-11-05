@@ -16,8 +16,6 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "users")
-@AllArgsConstructor
-@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id

@@ -33,11 +33,11 @@ public class MatchController {
         return matchService.save(matchDto);
     }
 
-    @PostMapping("/match/{id}/addPlayer")
-    public void matchAddPlayers(@PathVariable("id") Long id) {
+    @PostMapping("/match/{id}/addPlayer/{userId}")
+    public void matchAddPlayers(@PathVariable("id") Long id, @PathVariable ("userId") Long userId) {
         try {
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            matchService.addPlayer(user, id);
+          //  User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            matchService.addPlayer(userId, id);
         } catch (ConflictException e) {
             throw new ConflictException("Conflict occurred");
         }

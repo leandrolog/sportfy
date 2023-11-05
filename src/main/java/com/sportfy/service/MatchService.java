@@ -53,9 +53,10 @@ public class MatchService {
         matchRepository.delete(match);
     }
 
-    public void addPlayer(User user, Long id) {
+    public void addPlayer(Long userId, Long id) {
         Optional<Match> matchOptional = findById(id);
 
+        User user = userService.findById(userId).get();
         if (matchOptional.isPresent()) {
             matchRepository.save(verifySlot(matchOptional.get(), user));
         } else {
