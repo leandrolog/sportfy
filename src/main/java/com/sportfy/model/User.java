@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,10 @@ public class User implements UserDetails {
     private Long id;
     private String name;
     private String email;
+    private String gender;
+    private String city;
+    private Date birthDate;
+    private String favoriteSport;
     @ManyToMany
     @JoinColumn(name = "match_id")
     private List<Match> matches;

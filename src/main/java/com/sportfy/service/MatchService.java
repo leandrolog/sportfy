@@ -58,6 +58,11 @@ public class MatchService {
 
         User user = userService.findById(userId).get();
         if (matchOptional.isPresent()) {
+            Match match = matchOptional.get();
+            boolean userExists = match.getPlayers().stream().anyMatch(player -> player.getId().equals(userId));
+            if (userExists) {
+                throw new ConflictException("User is already in the match");
+            }
             matchRepository.save(verifySlot(matchOptional.get(), user));
         } else {
             throw new ConflictException("Match not found");
