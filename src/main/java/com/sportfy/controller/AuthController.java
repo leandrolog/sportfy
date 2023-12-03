@@ -3,6 +3,8 @@ package com.sportfy.controller;
 import com.sportfy.dto.LoginDto;
 import com.sportfy.model.User;
 import com.sportfy.service.TokenService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,22 +22,33 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private TokenService tokenService;
+
     private void validateLoginRequest(LoginDto login) {
         if (login.getEmail() == null || login.getPassword() == null) {
             throw new IllegalArgumentException("Email and password are required.");
         }
     }
+
     @PostMapping("/login")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login successful"),
+            @ApiResponse(responseCode = "400", description = "Invalid login credentials")
+    })
     public String login(@RequestBody LoginDto login) {
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword());
+        try {
+            validateLoginRequest(login);
 
-        Authentication authenticate = this.authenticationManager
-                .authenticate(usernamePasswordAuthenticationToken);
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword());
 
-        var user = (User) authenticate.getPrincipal();
+            Authentication authenticate = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        return tokenService.createToken(user);
+            var user = (User) authenticate.getPrincipal();
 
+            return tokenService.createToken(user);
+
+        } catch (Exception e) {
+            throw new ConflictException("Invalid login credentials");
+        }
     }
 }

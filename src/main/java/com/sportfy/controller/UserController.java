@@ -3,6 +3,9 @@ package com.sportfy.controller;
 import com.sportfy.dto.UserDto;
 import com.sportfy.model.User;
 import com.sportfy.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -29,6 +32,11 @@ public class UserController {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+    @Operation(description = "Create a new user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User created successfully"),
+            @ApiResponse(responseCode = "400", description = "Error creating a new user")
+    })
     @PostMapping("/user")
     public User saveUser(@RequestBody UserDto userDto) {
         User user = new User();
@@ -36,12 +44,23 @@ public class UserController {
         BeanUtils.copyProperties(userDto ,user, "matches");
         return userService.save(user);
     }
+
+    @Operation(description = "Get all users")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Return all users"),
+            @ApiResponse(responseCode = "400", description = "Error finding all users")
+    })
     @GetMapping("/users")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<User> getAllUsers(@SortDefault(sort = "id", direction = Sort.Direction.ASC) Sort sort) {
         return userService.findAll(sort);
     }
 
+    @Operation(description = "Find a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Return one user"),
+            @ApiResponse(responseCode = "400", description = "Error finding the user")
+    })
     @GetMapping("user/{id}")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public User getUser(@PathVariable("id") Long id) {
@@ -53,6 +72,11 @@ public class UserController {
         }
     }
 
+    @Operation(description = "Delete a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "400", description = "Error deleting a user")
+    })
     @DeleteMapping("user/{id}")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Object> deleteUser(@PathVariable("id") Long id) {
@@ -61,9 +85,14 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No match was found with the provided ID.");
         }
         userService.delete(userModelOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Usuário deletado");
+        return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
     }
 
+    @Operation(description = "Update a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Error updating a user")
+    })
     @PutMapping("user/{id}")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public User updateUser(@PathVariable("id") Long id, @RequestBody User user) {
@@ -71,8 +100,8 @@ public class UserController {
         if (!userModelOptional.isPresent()) {
             throw new ConflictException("Match not found.");
         }
-        User userToUpDate = userModelOptional.get();
-        BeanUtils.copyProperties(user, userToUpDate);
-        return userService.save(userToUpDate);
+        User userToUpdate = userModelOptional.get();
+        BeanUtils.copyProperties(user, userToUpdate);
+        return userService.save(userToUpdate);
     }
 }
