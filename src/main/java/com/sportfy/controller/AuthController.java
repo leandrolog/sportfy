@@ -30,10 +30,6 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Login successful"),
-            @ApiResponse(responseCode = "400", description = "Invalid login credentials")
-    })
     public String login(@RequestBody LoginDto login) {
         try {
             validateLoginRequest(login);

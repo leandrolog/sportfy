@@ -108,7 +108,7 @@ public class MatchController {
             @ApiResponse(responseCode = "200", description = "Match updated successfully"),
             @ApiResponse(responseCode = "400", description = "Error updating the match")
     })
-    public Match updateProduct(@PathVariable(value = "id") Long id, @RequestBody MatchDto matchDto) {
+    public Match updateMatch(@PathVariable(value = "id") Long id, @RequestBody MatchDto matchDto) {
         return matchService.update(matchDto, id);
     }
 }
