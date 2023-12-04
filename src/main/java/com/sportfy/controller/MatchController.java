@@ -4,6 +4,7 @@ import com.sportfy.dto.MatchDto;
 import com.sportfy.model.Match;
 import com.sportfy.service.MatchService;
 import com.sportfy.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class MatchController {
 
     @PostMapping("/match")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(description = "Create a new match")
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Match created successfully"),
             @ApiResponse(responseCode = "400", description = "Error creating a match")
@@ -50,6 +53,8 @@ public class MatchController {
     }
 
     @PostMapping("/match/{matchId}/removePlayer/{userId}")
+    @Operation(description = "remove a player")
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Player removed successfully"),
             @ApiResponse(responseCode = "400", description = "Error removing player from the match")
@@ -64,6 +69,7 @@ public class MatchController {
 
     @GetMapping("/match")
     // @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @Operation(description = "get all matchs")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Return all matches"),
             @ApiResponse(responseCode = "400", description = "Error finding all matches")
@@ -74,6 +80,7 @@ public class MatchController {
 
     @GetMapping("/match/{id}")
     // @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @Operation(description = "find a match")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Return one match"),
             @ApiResponse(responseCode = "400", description = "Error finding the match")
@@ -89,6 +96,7 @@ public class MatchController {
 
     @DeleteMapping("/match/{id}")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(description = "delete match")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Match deleted successfully"),
             @ApiResponse(responseCode = "400", description = "Error deleting the match")
@@ -104,6 +112,7 @@ public class MatchController {
 
     @PutMapping("/match/{id}")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(description = "update match")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Match updated successfully"),
             @ApiResponse(responseCode = "400", description = "Error updating the match")

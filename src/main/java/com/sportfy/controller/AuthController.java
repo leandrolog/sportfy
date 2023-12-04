@@ -3,6 +3,7 @@ package com.sportfy.controller;
 import com.sportfy.dto.LoginDto;
 import com.sportfy.model.User;
 import com.sportfy.service.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class AuthController {
         }
     }
 
+    @Operation(description = "login")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User loged successfully"),
+            @ApiResponse(responseCode = "400", description = "Login error")
+    })
     @PostMapping("/login")
     public String login(@RequestBody LoginDto login) {
         try {
